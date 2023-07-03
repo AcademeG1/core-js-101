@@ -41,8 +41,8 @@ function Rectangle(width, height) {
  *    [1,2,3]   =>  '[1,2,3]'
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
-function getJSON(/* obj */) {
-  throw new Error('Not implemented');
+function getJSON(obj) {
+  return JSON.stringify(obj);
 }
 
 
@@ -57,8 +57,8 @@ function getJSON(/* obj */) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON(/* proto, json */) {
-  throw new Error('Not implemented');
+function fromJSON(proto, json) {
+  return Object.assign(Object.create(proto), JSON.parse(json));
 }
 
 
@@ -117,35 +117,58 @@ function fromJSON(/* proto, json */) {
  */
 
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+  elementValue: '',
+  idValue: '',
+  classValue: '',
+  attrValue: '',
+  pseudoClassValue: '',
+  pseudoElementValue: '',
+  selectors: [],
+
+  element(value) {
+    const newBuilder = Object.create(this);
+    newBuilder.elementValue = value;
+    return newBuilder;
   },
 
-  id(/* value */) {
-    throw new Error('Not implemented');
+  id(value) {
+    const newBuilder = Object.create(this);
+    newBuilder.idValue += `#${value}`;
+    return newBuilder;
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    const newBuilder = Object.create(this);
+    newBuilder.classValue += `.${value}`;
+    return newBuilder;
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    const newBuilder = Object.create(this);
+    newBuilder.attrValue = `[${value}]`;
+    return newBuilder;
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  pseudoClass(value) {
+    const newBuilder = Object.create(this);
+    newBuilder.pseudoClassValue += `:${value}`;
+    return newBuilder;
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  pseudoElement(value) {
+    const newBuilder = Object.create(this);
+    newBuilder.pseudoElementValue += `::${value}`;
+    return newBuilder;
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  combine() {
+    return this;
+  },
+
+  stringify() {
+    return `${this.elementValue}${this.idValue}${this.classValue}${this.attrValue}${this.pseudoClassValue}${this.pseudoElementValue}`;
   },
 };
-
 
 module.exports = {
   Rectangle,
